@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{d2cb0f96-ec3a-4b44-a166-38199702e957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Include">
+      <UniqueIdentifier>{b926f02a-69d3-4eb9-83b1-b6bef48f58f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Lib">
+      <UniqueIdentifier>{807551ef-0014-4a4e-8f5c-df0461c742f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Lib\x64">
+      <UniqueIdentifier>{d90b43ff-41b4-4e3f-898f-e9d9c95630b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Include\IMV">
+      <UniqueIdentifier>{106cdc50-fa45-4792-af9d-da4aebb25508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera\Src">
+      <UniqueIdentifier>{1ef6c8f6-3cf5-40fd-99eb-16a119049292}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPS">
+      <UniqueIdentifier>{6ff86441-6be1-4960-9a21-40b25f871d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPS\Inlclude">
+      <UniqueIdentifier>{1463d94e-0e2d-4afd-8fa5-ade58252b94e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GPS\Src">
+      <UniqueIdentifier>{7707fbda-3be9-4369-8475-499cc705adc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{18a6cb3f-5760-4735-9095-d54656fcffbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Include">
+      <UniqueIdentifier>{8a30231f-65b5-4c10-a66c-6a7aaca4d981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Src">
+      <UniqueIdentifier>{5f1663dd-dc95-4027-b1c6-d2def1012716}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera\Src\SoftTrigger.cpp">
+      <Filter>Camera\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Src\Common.cpp">
+      <Filter>Camera\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Src\ImageConvert.cpp">
+      <Filter>Camera\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GPS\Src\GetGPSData.cpp">
+      <Filter>GPS\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GPS\Src\GPGGA_GPSInfoProcesser.cpp">
+      <Filter>GPS\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GPS\Src\GPSInfoProcesser.cpp">
+      <Filter>GPS\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Src\ComAccess.cpp">
+      <Filter>Common\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Camera\Src\SaveImageToBmp.cpp">
+      <Filter>Camera\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="GetHardwareData.cpp" />
+    <ClCompile Include="Camera\Src\CameraProcesser.cpp">
+      <Filter>Camera\Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Camera\Lib\x64\MVSDKmd.lib">
+      <Filter>Camera\Lib\x64</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera\Include\IMV\IMVApi.h">
+      <Filter>Camera\Include\IMV</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Include\IMV\IMVDefines.h">
+      <Filter>Camera\Include\IMV</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Include\SoftTrigger.h">
+      <Filter>Camera\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Include\Common.h">
+      <Filter>Camera\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Include\ImageConvert.h">
+      <Filter>Camera\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GPS\Include\GetGPSData.h">
+      <Filter>GPS\Inlclude</Filter>
+    </ClInclude>
+    <ClInclude Include="GPS\Include\GPSInfoDataStructure.h">
+      <Filter>GPS\Inlclude</Filter>
+    </ClInclude>
+    <ClInclude Include="GPS\Include\GPSInfoProcesser.h">
+      <Filter>GPS\Inlclude</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Include\ComAccess.h">
+      <Filter>Common\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Include\SaveImageToBmp.h">
+      <Filter>Camera\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="GetHardwareData.h" />
+    <ClInclude Include="Camera\Include\CameraProcesser.h">
+      <Filter>Camera\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

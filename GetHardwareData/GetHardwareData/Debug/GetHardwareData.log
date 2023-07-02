@@ -1,0 +1,13 @@
+﻿GetHardwareData.obj : error LNK2005: "bool g_isExitThread" (?g_isExitThread@@3_NA) 已经在 SoftTrigger.obj 中定义
+SoftTrigger.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_SetEnumFeatureSymbol@12，该符号在函数 "int __cdecl setSoftTriggerConf(void *)" (?setSoftTriggerConf@@YAHPAX@Z) 中被引用
+SoftTrigger.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_ExecuteCommandFeature@8，该符号在函数 "unsigned int __stdcall executeSoftTriggerProc(void *)" (?executeSoftTriggerProc@@YGIPAX@Z) 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_EnumDevices@8，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_CreateHandle@12，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_DestroyHandle@4，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_Open@4，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_Close@4，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_StartGrabbing@4，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_StopGrabbing@4，该符号在函数 _main 中被引用
+GetHardwareData.obj : error LNK2019: 无法解析的外部符号 __imp__IMV_AttachGrabbing@12，该符号在函数 _main 中被引用
+Camera\Lib\x64\MVSDKmd.lib : warning LNK4272: 库计算机类型“x64”与目标计算机类型“x86”冲突
+C:\Users\win10\Desktop\GetHardwareDataVSProject\GetHardwareData\Debug\GetHardwareData.exe : fatal error LNK1120: 10 个无法解析的外部命令

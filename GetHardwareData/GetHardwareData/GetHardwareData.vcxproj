@@ -194,6 +194,9 @@
     <ClInclude Include="GPS\Include\GPSInfoDataStructure.h" />
     <ClInclude Include="GPS\Include\GPSInfoProcesser.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ComConfig.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

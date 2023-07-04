@@ -1,1 +1,12 @@
-﻿
+﻿  main.cpp
+c:\users\win10\desktop\gethardwaredatavsproject\gethardwaredata\gethardwaredata\opencv\opencv320\build\include\opencv2\core\mat.hpp(2585): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\win10\desktop\gethardwaredatavsproject\gethardwaredata\gethardwaredata\opencv\opencv320\build\include\opencv2\core\persistence.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\win10\desktop\gethardwaredatavsproject\gethardwaredata\gethardwaredata\opencv\opencv320\build\include\opencv2\core\utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\win10\desktop\gethardwaredatavsproject\gethardwaredata\gethardwaredata\opencv\opencv320\build\include\opencv2\core\utility.hpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+c:\users\win10\desktop\gethardwaredatavsproject\gethardwaredata\gethardwaredata\opencv\opencv320\build\include\opencv2\imgproc.hpp(591): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  正在生成代码
+  0 of 722 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  GetHardwareData.vcxproj -> C:\Users\win10\Desktop\GetHardwareDataVSProject\GetHardwareData\x64\Release\GetHardwareData.exe

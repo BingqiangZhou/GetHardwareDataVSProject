@@ -10,15 +10,16 @@
 		- [2.2、将 `BayerRG12`格式转换为 `RGB8`彩色图（基于ImageConvert示例项目）](#22将-bayerrg12格式转换为-rgb8彩色图基于imageconvert示例项目)
 		- [2.3、转换为Mat对象并保存为文件](#23转换为mat对象并保存为文件)
 		- [2.4、验证1s可以保存多少帧图像](#24验证1s可以保存多少帧图像)
-		- [3.5、逻辑整理与流程优化](#35逻辑整理与流程优化)
+		- [2.5、逻辑整理与流程优化](#25逻辑整理与流程优化)
+		- [2.6、验证视频压缩率很高是否有影响到图像质量](#26验证视频压缩率很高是否有影响到图像质量)
 	- [三、获取以及解析GPS串口数据](#三获取以及解析gps串口数据)
 		- [3.1、读取GPS串口数据](#31读取gps串口数据)
 		- [3.2、读取GPS串口数据线程处理流程](#32读取gps串口数据线程处理流程)
 		- [3.3、GPS数据解析与编码流程](#33gps数据解析与编码流程)
 		- [3.4、GPS数据处理相关代码](#34gps数据处理相关代码)
 		- [3.5、将编码后的数据保存到文件](#35将编码后的数据保存到文件)
+		- [3.6、串口读取的相关参考链接](#36串口读取的相关参考链接)
 	- [四、获取激光雷达数据](#四获取激光雷达数据)
-
 
 ## 实现思路：
 
@@ -336,37 +337,37 @@ void imageConvert(IMV_HANDLE devHandle, IMV_Frame frame, IMV_EPixelType convertF
 
 图一，在GPS数据（1s中写入一次）中查看保存数据时，对应采集到的图像序号，以此来判断1s保存了多少张图。
 
-![](图像保存帧数示意图.png)
+![](Pictures%20for%20Markdown/图像保存帧数示意图.png)
 
 2.4.2、发现在程序运行后，网络与磁盘利用率会很快达到100%（如下图二所示），使得 `imwrite`保存图像耗时较多，导致帧率异常（如下图三所示）。
 
 图二、网络与磁盘利用率在程序运行后，很快就达到了100%。
 
-![](图像保存帧数示意图4.png)
+![](Pictures%20for%20Markdown/图像保存帧数示意图4.png)
 
 图三、在网络与磁盘利用率达到100%后，`imwrite`保存图像耗时很不稳定，有时是十几ms，但有时甚至达到了900多ms。
 
-![](图像保存帧数示意图3.png)
+![](Pictures%20for%20Markdown/图像保存帧数示意图3.png)
 
 2.4.3、保存 `bmp`图像行不通，改为保存 `avi`视频后，发现1s能稳定保存8帧以上（如下图四所示）。
 
 图四、在GPS数据（1s中写入一次）中查看保存数据时，两次保存数据对应采集到的图像序号差基本稳定在8以上。
 
-![](图像保存帧数示意图5.png)
+![](Pictures%20for%20Markdown/图像保存帧数示意图5.png)
 
-### 3.5、逻辑整理与流程优化
+### 2.5、逻辑整理与流程优化
 
-3.5.1、在确定保存为视频，可以实现1s稳定8帧以上的图像保存之后，对代码结构进行了一下优化（流程图与函数关系，如下图五、图六所示）。
+2.5.1、在确定保存为视频，可以实现1s稳定8帧以上的图像保存之后，对代码结构进行了一下优化（流程图与函数关系，如下图五、图六所示）。
 
 图五、流程图。
 
-![](相机数据采集-流程图.png)
+![](Pictures%20for%20Markdown/相机数据采集-流程图.png)
 
 图六、函数关系图。
 
-![](相机数据采集-函数关系图.png)
+![](Pictures%20for%20Markdown/相机数据采集-函数关系图.png)
 
-3.5.2、相关代码
+2.5.2、相关代码
 
 `CameraProcesser.h`
 
@@ -441,6 +442,7 @@ private:
 `CameraProcesser.cpp`
 
 ```C++
+
 #include "CameraProcesser.h"
 
 #include "Common.h"
@@ -969,6 +971,107 @@ int ExecuteSoftTriggerThread(CameraProcesser *cameraProcesser) {
 }
 ```
 
+### 2.6、验证视频压缩率很高是否有影响到图像质量
+
+当前保存视频时，使用的 `'X', 'V', 'I', 'D'`编码写入 `2048*1536`大小的图像1000帧，`.avi`文件大小仅23MB，而使用无压缩的编码 `'I', '4', '2', '0'`写入770帧，`.avi`文件已经3.5GB了，相差好几个数量级了，为了验证当视频压缩率很高的编码写入图像，读取时的图像质量，是否和无压缩的视频编码有区别，比较了直接读取的视频第一帧和 `cv::imwrite`直接保存第一帧的 `.bmp`图的像素值差距，发现只有几个灰度值的差距(如下两个图所示)，基本可以忽略不计。
+
+结论：影响极小，直接使用 `'X', 'V', 'I', 'D'`编码，占用空间小。
+
+2.6.1、`'X', 'V', 'I', 'D'`编码
+
+![压缩的图像帧像素值差](Pictures%20for%20Markdown/压缩的图像帧像素值差.png)
+
+2.6.2、`'I', '4', '2', '0'`编码
+
+这里其实无压缩的也有些差距，有点奇怪，但暂不深入了解了。
+
+![无压缩的图像帧像素值差](Pictures%20for%20Markdown/无压缩的图像帧像素值差.png)
+
+2.6.3、做验证相关的代码
+
+```C++
+	cv::Mat matImg = cv::imread("C:\\Data\\RealImg.bmp", -1);
+	//cv::Mat matImg1 = cv::imread("C:\\Data\\RealImg_YUV.bmp", -1);
+	cv::Mat matImg11 = cv::imread("C:\\Data\\RealImg_11.bmp", -1);
+	cv::Mat matImg2;
+	cvtColor(matImg, matImg2, cv::COLOR_YUV2BGR);
+
+	cv::VideoCapture capture;
+	//连接视频
+	//capture.open("C:\\Data\\img_2023_7_3_21_21_50_727\\realImg.avi");
+	capture.open("C:\\Data\\img_2023_7_3_22_11_31_442\\realImg.avi");
+	if (!capture.isOpened()) {
+		printf("could not load video data...\n");
+		return -1;
+	}
+	int frames = capture.get(cv::CAP_PROP_FRAME_COUNT);//获取视频针数目(一帧就是一张图片)
+	double fps = capture.get(cv::CAP_PROP_FPS);//获取每针视频的频率
+	// 获取帧的视频宽度，视频高度
+	cv::Size size = cv::Size(capture.get(cv::CAP_PROP_FRAME_WIDTH), capture.get(cv::CAP_PROP_FRAME_HEIGHT));
+	std::cout << frames << std::endl;
+	std::cout << fps << std::endl;
+	std::cout << size << std::endl;
+	// 创建视频中每张图片对象
+	cv::Mat frame;
+
+	//将视频转给每一张张图进行处理
+	capture >> frame;
+	//释放
+	capture.release();
+
+	imwrite("C:\\Data\\Realimg2.bmp", frame);
+
+	cv::Mat frame2;
+	cvtColor(frame, frame2, cv::COLOR_YUV2BGR);
+
+	//cv::Mat matImg2 = frame - matImg1;
+	bool bFlag1 = false;
+	for (int row = 0; row < matImg.rows; row++) {
+		for (int col = 0; col < matImg.cols; col++) {
+			int b1 = matImg.at<cv::Vec3b>(row, col)[0];  //读取imwrite直接保存的第一帧
+			int g1 = matImg.at<cv::Vec3b>(row, col)[1];
+			int r1 = matImg.at<cv::Vec3b>(row, col)[2];
+		
+			int b2 = frame.at<cv::Vec3b>(row, col)[0];  //读取视频的第一帧
+			int g2 = frame.at<cv::Vec3b>(row, col)[1];
+			int r2 = frame.at<cv::Vec3b>(row, col)[2];
+
+			if (b1 - b2 != 0 || g1 - g2 != 0 || r1 - r2 != 0)
+			{
+				bFlag1 = true;
+			}
+		}
+	}
+
+	bool bFlag2 = false;
+	for (int row = 0; row < matImg1.rows; row++) {
+		for (int col = 0; col < matImg1.cols; col++) {
+			int b1 = matImg1.at<cv::Vec3b>(row, col)[0];  //读取像素
+			int g1 = matImg1.at<cv::Vec3b>(row, col)[1];
+			int r1 = matImg1.at<cv::Vec3b>(row, col)[2];
+
+			int b2 = frame2.at<cv::Vec3b>(row, col)[0];  //读取像素
+			int g2 = frame2.at<cv::Vec3b>(row, col)[1];
+			int r2 = frame2.at<cv::Vec3b>(row, col)[2];
+
+			if (b1 - b2 != 0 || g1 - g2 != 0 || r1 - r2 != 0)
+			{
+				bFlag1 = true;
+			}
+		}
+	}
+```
+
+2.6.4、相关参考链接
+
+- [VideoWriter - OpenCV官方文档](https://docs.opencv.org/3.4/dd/d9e/classcv_1_1VideoWriter.html#ac3478f6257454209fa99249cc03a5c59)
+- [VideoWriter（）函数及其参数 - CSDN](https://blog.csdn.net/a892573486/article/details/107551224)
+- [Python+OpenCv--采用不同编码器保存的视频比较 - CSDN](https://blog.csdn.net/qq_30622831/article/details/82111200)
+- [OpenCV中cv2.VideoWriter_fourcc()函数和cv2.VideoWriter()函数的结合使用 - CSDN](https://blog.csdn.net/weixin_43869605/article/details/119826406)
+- [cv2.VideoWriter()指定写入视频帧编码格式 - CSDN](https://blog.csdn.net/art1st2012/article/details/101746964)
+- [视频的编解码格式 - Alex Chung的文章 - 知乎](https://zhuanlan.zhihu.com/p/143720720)
+- [有损压缩、无损压缩（图片、音频、视频）- CSDN](https://blog.csdn.net/targusyoona/article/details/9624203)
+
 ## 三、获取以及解析GPS串口数据
 
 ### 3.1、读取GPS串口数据
@@ -1148,7 +1251,7 @@ GPS数据处理类关系图，如下图所示，其中GPS主要分为解析（`D
 
 编码其他GPS数据仅需在子类中加入相应数据结构体定义以及重载 `PushDataStructToStrFieldList`函数即可）
 
-![GPS数据处理类继承关系](GPS数据处理.png)
+![GPS数据处理类继承关系](Pictures%20for%20Markdown/GPS数据处理.png)
 
 ### 3.4、GPS数据处理相关代码
 
@@ -1493,5 +1596,13 @@ void GPGGA_GPSInfoProcesser::PushDataStructToStrFieldList() {
 	outFile.flush();
 	outFile.close();
 ```
+
+### 3.6、串口读取的相关参考链接
+
+- [Windows下串口通信编程详解 - CSDN](https://blog.csdn.net/weixin_42546496/article/details/81542536)
+- [串口 SetCommMask WaitCommEvent 设置 等待串口通信事件 - CSDN](https://blog.csdn.net/targusyoona/article/details/9624203)
+- [c++接收发送串口数据（串口通信） - CSDN](https://blog.csdn.net/weixin_44353958/article/details/104156394)
+- [访问串口（通信）资源相关文档 - 微软官方文档](https://learn.microsoft.com/en-us/windows/win32/devio/communications-resources)
+- [串口通信相关函数 Communications Functions - 微软官方文档](https://learn.microsoft.com/en-us/windows/win32/devio/communications-functions)
 
 ## 四、获取激光雷达数据

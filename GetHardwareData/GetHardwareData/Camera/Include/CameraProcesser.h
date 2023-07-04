@@ -36,6 +36,8 @@ private:
 	cv::VideoWriter videoWriter;	// 图像保存为avi格式视频,对应的VideoWriter对象
 	GetCameraFrameMethod getCameraFrameMethod; // 获取图像帧的方式，包括：循环获取单帧GET_SINGAL_FRAME_RECURRENT、回调函数获取帧GRAB_CALLBACK、 软触发获取帧FRAME_SOFT_TRIGGER
 
+	std::ofstream outFile;
+
 public:
 	CameraProcesser();
 	~CameraProcesser();

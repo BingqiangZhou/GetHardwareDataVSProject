@@ -5,6 +5,7 @@
 #include "ImageConvert.h"
 
 extern int nImgNo;
+extern std::string strGPSInfo;
 
 CameraProcesser::CameraProcesser()
 {
@@ -37,7 +38,7 @@ int CameraProcesser::GetCameraId() {
 	if (deviceInfoList.nDevNum < 1)
 	{
 		printf("no camera\n");
-		getchar();
+		//getchar();
 		return IMV_ERROR;
 	}
 
@@ -175,6 +176,16 @@ int CameraProcesser::InitCameraSetting(char* strTime, GetCameraFrameMethod getCa
 		return -1;
 	}
 
+	// 创建保存GPS数据的txt文件，并以追加的形式加入GPS数据
+	char outFileName[256];
+	sprintf(outFileName, "%sGPS_%s.txt", OUT_PATH, strTime);
+	outFile.open(outFileName, std::ios::out | std::ios::app);
+	if (!outFile.is_open())
+	{
+		printf("%s create failed!\n", outFileName);
+		return IMV_ERROR;
+	}
+
 	// 获取相机id
 	int ret = GetCameraId();
 	if (IMV_OK != ret)
@@ -250,7 +261,10 @@ int CameraProcesser::StartGrabbing() {
 
 	char fname[256];
 	sprintf(fname, "%s\\realImg.avi", outDir);
-	videoWriter = cv::VideoWriter(fname, cv::VideoWriter::fourcc('X', 'V', 'I', 'D'), 30.0, cv::Size(width, height));
+	//sprintf(fname, "%s\\realImg%2d.bmp", outDir);
+	
+	//cv::VideoWriter::fourcc('X', 'V', 'I', 'D'/*'I', '4', '2', '0'*/)
+	videoWriter = cv::VideoWriter(fname, cv::VideoWriter::fourcc('X', 'V', 'I', 'D'/*'I', '4', '2', '0'*/), 30.0, cv::Size(width, height));
 	if (!videoWriter.isOpened())
 	{
 		return IMV_ERROR;
@@ -267,6 +281,12 @@ int CameraProcesser::StopGrabingAndReleaseSource() {
 		printf("Stop grabbing failed! ErrorCode[%d]\n", ret);
 		return ret;
 	}
+
+	if (outFile.is_open())
+	{
+		outFile.close();
+	}
+
 	if (videoWriter.isOpened())
 	{
 		videoWriter.release();
@@ -343,6 +363,7 @@ int GetSingalFrameRecurrentThread(CameraProcesser *cameraProcesser) {
 		// 获取一帧图像
 		// Get a frame image
 		cameraProcesser->ret = IMV_GetFrame(cameraProcesser->devHandle, &frame, 500);
+		//全局赋值到局部
 		if (IMV_OK != cameraProcesser->ret)
 		{
 			printf("Get frame failed! ErrorCode[%d]\n", cameraProcesser->ret);
@@ -356,7 +377,7 @@ int GetSingalFrameRecurrentThread(CameraProcesser *cameraProcesser) {
 		//cv::Mat matBayer((int)width, (int)height, CV_8UC3, &frame);
 		//cvtColor(matBayer, matImg, cv::COLOR_BayerRG2BGR);
 
-		if (!matImg.empty())
+		if (!matImg.empty() && strGPSInfo != "")
 		{
 			////打开结果保存文件
 			//char fname[256];
@@ -367,12 +388,26 @@ int GetSingalFrameRecurrentThread(CameraProcesser *cameraProcesser) {
 			////{
 			////	t.detach();
 			////}
-			//double start = GetTickCount();
+			//if (nImgNo == 0)
+			//{
+			//	imwrite("C:\\Data\\RealImg_11.bmp", matImg);
+			//}
+			double start = GetTickCount();
 			//cv::imwrite(fname, matImg);
-			//double  end = GetTickCount();
-			//std::cout << "imwrite GetTickCount:" << end - start << std::endl;
+			//cv::Mat matImg2;
+			//cvtColor(matImg, matImg2, cv::COLOR_BGR2YUV);
 			cameraProcesser->videoWriter.write(matImg);
-			nImgNo++;
+			//写到TXT
+			cameraProcesser->outFile << cameraProcesser->cameraIndex << " " << nImgNo << " " << strGPSInfo;
+			cameraProcesser->outFile.flush();
+			double end = GetTickCount();
+			std::cout << "imwrite GetTickCount:" << end - start << std::endl;
+
+			//if (nImgNo == 0)
+			//{
+			//	cv::imwrite("C:\\Data\\RealImg.bmp", matImg);
+			//}
+			nImgNo++; // 当前从0开始算起，如果要从1开始算起的话，将这一句放在写入图像帧之前
 			//printf("%s \n", fname);
 		}
 		//if (saveImageToBmp(devHandle, &frame, outDir))
@@ -386,7 +421,7 @@ int GetSingalFrameRecurrentThread(CameraProcesser *cameraProcesser) {
 
 		// 通过睡眠时间来调节帧率
 		// Adjust the frame rate by sleep time
-		Sleep(50);
+		//Sleep(10);
 
 		// 释放图像缓存
 			// Free image buffer
